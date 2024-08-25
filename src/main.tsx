@@ -1,5 +1,26 @@
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
-import App from '@/App'
+import { Router } from '@/components/router.tsx'
+import { persistor, store } from '@/store/store'
 
-createRoot(document.getElementById('root')!).render(<App test='' />)
+import { router } from './router.tsx'
+
+const rootElement = document.getElementById('root')!
+
+const root = ReactDOM.createRoot(rootElement)
+
+const Providers = () => {
+  return (
+    <Provider store={store}>
+      <PersistGate
+        loading={null}
+        persistor={persistor}>
+        <Router router={router} />
+      </PersistGate>
+    </Provider>
+  )
+}
+
+root.render(<Providers />)

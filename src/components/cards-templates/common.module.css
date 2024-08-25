@@ -1,0 +1,28 @@
+.flipCard {
+    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flipCardInner {
+    @apply relative h-full w-full;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flipCard:hover .flipCardInner {
+    transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flipCardFront, .flipCardBack {
+    @apply absolute h-full w-full;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+
+
+/* Style the back side */
+.flipCardBack {
+    transform: rotateY(180deg);
+}

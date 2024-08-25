@@ -1,0 +1,216 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Link } from '@tanstack/react-router'
+import { FC } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  MaskInput,
+  PasswordInput,
+} from '@/components/ui'
+import { DateFormatter } from '@/utils/formatters.ts'
+import {
+  birthDateValidator,
+  emailValidator,
+  firstNameValidator,
+  lastNameValidator,
+  looseOptional,
+  phoneValidator,
+} from '@/validation'
+import { z } from '@/validation/ru-zod.ts'
+import { passwordValidationSchema } from '@/validation/zod-password-validation-schema.ts'
+
+const formSchema = passwordValidationSchema.and(
+  z.object({
+    email: emailValidator,
+    firstName: firstNameValidator,
+    lastName: lastNameValidator,
+    birthDate: birthDateValidator.optional(),
+    phone: looseOptional(phoneValidator),
+  }),
+)
+
+export type IFormValues = z.infer<typeof formSchema>
+
+export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props) => {
+  const form = useForm<IFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      confirmPassword: '',
+      phone: '',
+    },
+  })
+
+  return (
+    <Card className='w-full'>
+      <CardHeader>
+        <CardTitle className='text-3xl mb-1 text-center font-medium'>Регистрация</CardTitle>
+        <CardDescription className='text-center'>Заполните поля</CardDescription>
+      </CardHeader>
+      <CardContent className='min-w-40'>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(props.onSubmit)}
+            className='space-y-8'>
+            <fieldset disabled={form.formState.isSubmitting}>
+              <div className='grid gap-4'>
+                <div className='grid grid-cols-2 gap-4'>
+                  <FormField
+                    control={form.control}
+                    name='firstName'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel required>Имя</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name='lastName'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel required>Фамилия</FormLabel>
+                        <FormControl>
+                          <Input
+                            type='lastName'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className='grid grid-cols-2 gap-4'>
+                  <FormField
+                    control={form.control}
+                    name='password'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel required>Пароль</FormLabel>
+                        <FormControl>
+                          <PasswordInput {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name='confirmPassword'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel required>Подтверждение пароля</FormLabel>
+                        <FormControl>
+                          <PasswordInput {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name='email'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel required>Электронная почта</FormLabel>
+                      <FormControl>
+                        <Input
+                          // type='email'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className='grid grid-cols-2 gap-4'>
+                  <FormField
+                    control={form.control}
+                    name='phone'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Телефон</FormLabel>
+                        <FormControl>
+                          <MaskInput
+                            {...field}
+                            mask={{
+                              mask: '+{7} 000 000 00-00',
+                            }}
+                            placeholder='+7 ___ ___-__-__'
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name='birthDate'
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <FormItem>
+                        <FormLabel>Дата рождения</FormLabel>
+                        <FormControl>
+                          <Input
+                            type='date'
+                            max={DateFormatter.yyyymmdd(new Date())}
+                            value={DateFormatter.yyyymmdd(value)}
+                            onChange={(e) => onChange(new Date(e.target.value))}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <Button
+                  type='submit'
+                  className='w-full mt-5'>
+                  Создать аккаунт
+                </Button>
+              </div>
+
+              <div className='mt-4 text-center text-sm'>
+                У вас уже есть аккаунт?{' '}
+                <Link
+                  to='/login'
+                  className='underline'>
+                  Войти
+                </Link>
+              </div>
+            </fieldset>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  )
+}
