@@ -14,9 +14,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     }),
     login: builder.mutation<ILoginResponse, ILoginPayload>({
       query: ({ email, password }) => ({
-        url: 'auth/sign-in',
+        url: 'login',
         method: 'POST',
-        body: { email, password },
+        body: { username: email, password },
       }),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {

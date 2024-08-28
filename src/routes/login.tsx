@@ -1,19 +1,37 @@
-import { createFileRoute, LinkProps, redirect } from '@tanstack/react-router'
+import { createFileRoute, LinkProps, redirect, useRouter } from '@tanstack/react-router'
+import { useDispatch } from 'react-redux'
 
 import AuthLayout from '@/components/layout/auth-layout.tsx'
 import { LoginForm } from '@/features/auth'
-import { sleep } from '@/utils'
+import { useLoginMutation } from '@/store/api/auth-slice.ts'
+import { login } from '@/store/slices/auth-slice.ts'
 import { z } from '@/validation/ru-zod.ts'
 
 const fallback: LinkProps['to'] = '/main' as const
 
 const LoginPage = () => {
+  const router = useRouter()
+  const navigate = Route.useNavigate()
+  const search = Route.useSearch()
+  // const [login] = useLoginMutation()
+  const dispatch = useDispatch()
+
   return (
     <AuthLayout>
       <LoginForm
-        onSubmit={(data) => {
-          console.log(data)
-          return sleep(2000)
+        onSubmit={async (data) => {
+          // await login({
+          //   password: data.password,
+          //   email: data.login,
+          // }).unwrap()
+          dispatch(
+            login({
+              password: 'test',
+              username: 'test',
+            }),
+          )
+          await router.invalidate()
+          await navigate({ to: search.redirect || fallback })
         }}
       />
     </AuthLayout>

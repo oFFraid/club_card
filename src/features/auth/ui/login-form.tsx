@@ -37,8 +37,6 @@ export const LoginForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props) =
     },
   })
 
-  console.log(form.formState.isSubmitting)
-
   return (
     <Card className='w-full'>
       <CardHeader>

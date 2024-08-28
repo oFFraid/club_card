@@ -1,18 +1,18 @@
 export interface ILoginPayload {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export interface ILoginResponse {
-  accessToken: string;
+  accessToken: string
 }
 
 export interface IRegisterPayload {
-  username: string;
-  email: string;
-  password: string;
+  username: string
+  email: string
+  password: string
 }
 
 export interface IRegisterResponse {
-  email: string;
+  email: string
 }

@@ -1,6 +1,7 @@
-import { Link, LinkProps } from '@tanstack/react-router'
+import { Link, LinkProps, useRouter } from '@tanstack/react-router'
 import { Menu, User } from 'lucide-react'
 import { FC, PropsWithChildren, useMemo } from 'react'
+import { useDispatch } from 'react-redux'
 
 import logoImage from '@/assets/images/t1-flag.png'
 import { Button } from '@/components/ui/button.tsx'
@@ -13,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.tsx'
+import { logout } from '@/store/slices/auth-slice.ts'
 import { cn } from '@/utils'
 
 const menuLinks: {
@@ -45,6 +47,20 @@ const LogoLink: FC<
 }
 
 const MiniUserProfile = () => {
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await router.invalidate()
+    router.navigate({
+      to: '/login',
+      search: {
+        redirect: router.history.location.href,
+      },
+    })
+    dispatch(logout())
+  }
+
   return (
     <div className='flex gap-3 items-center'>
       <DropdownMenu>
@@ -61,7 +77,7 @@ const MiniUserProfile = () => {
           <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Настройки</DropdownMenuItem>
-          <DropdownMenuItem>Выход</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>Выход</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <div className='text-sm flex flex-col items-start'>
