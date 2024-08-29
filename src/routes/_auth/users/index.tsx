@@ -1,30 +1,38 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
 
 import Layout from '@/components/layout'
 import UsersTable from '@/features/users/ui/UsersTable.tsx'
 import { useMembersQuery } from '@/store/api/members-slice.ts'
 import { paginationSchema } from '@/validation/pagination-schema.ts'
 
+const perPage = 5
+
 const UsersPage = () => {
   const { page } = Route.useSearch()
-  const [loading, setLoading] = useState(true)
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 700)
-  }, [])
 
   const membersQuery = useMembersQuery({
-    page: 1,
-    size: 3,
+    page: page - 1,
+    size: perPage,
   })
-  console.log(membersQuery.data)
+
+  const totalPages = Math.ceil((membersQuery?.data?.total || 0) / perPage)
+
   return (
     <Layout>
       <UsersTable
-        loading={loading}
+        items={membersQuery?.data?.result?.map((e) => ({
+          id: e.id,
+          firstName: e.firstName,
+          lastName: e.lastName,
+          birthDate: e.birthDay,
+          email: e.email,
+          privilegeLevel: e.privilege,
+          role: e.role,
+        }))}
+        loading={membersQuery.isFetching}
         pagination={{
           page: page,
-          total: 10,
+          total: totalPages,
         }}
       />
     </Layout>

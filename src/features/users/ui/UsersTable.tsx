@@ -29,23 +29,14 @@ import {
 } from '@/components/ui/pagination.tsx'
 import Spinner from '@/components/ui/spinner.tsx'
 import { PaginationParams, usePagination } from '@/hooks/use-pagination.ts'
-
-const users = new Array(10).fill(0).map((_, i) => ({
-  id: i,
-  firstName: 'Test',
-  lastName: 'Ivanov',
-  birthDate: '29.02.2031',
-  email: 'test@test.com',
-  privilegeLevel: 'VIP',
-  role: 'Администратор',
-}))
+import { PrivilegeResponse, RoleResponse } from '@/types/members.ts'
 
 const TablePagination: FC<
   {
     pagination: PaginationParams
   } & Pick<ButtonProps, 'size'>
 > = ({ pagination, size = 'sm' }) => {
-  const p = usePagination({ ...pagination, total: users.length, initialPage: 1 })
+  const paginationController = usePagination({ ...pagination, total: pagination.total, initialPage: 1 })
 
   return (
     <Pagination>
@@ -55,12 +46,12 @@ const TablePagination: FC<
             size={size}
             className='cursor-pointer select-none'
             search={{
-              page: p.active > 1 ? p.active - 1 : p.active,
+              page: paginationController.active > 1 ? paginationController.active - 1 : paginationController.active,
             }}
           />
         </PaginationItem>
 
-        {p.range.map((item, idx) => {
+        {paginationController.range.map((item, idx) => {
           if (item === 'dots')
             return (
               <PaginationItem key={`${idx}-${item}-pagination`}>
@@ -73,7 +64,7 @@ const TablePagination: FC<
               key={`${idx}-${item}-pagination`}>
               <PaginationLink
                 size={size}
-                isActive={p.active === p.range[idx]}
+                isActive={paginationController.active === paginationController.range[idx]}
                 search={{
                   page: item,
                 }}>
@@ -86,7 +77,10 @@ const TablePagination: FC<
           <PaginationNext
             size={size}
             search={{
-              page: p.active < p.total ? p.active + 1 : p.active,
+              page:
+                paginationController.active < paginationController.total
+                  ? paginationController.active + 1
+                  : paginationController.active,
             }}
           />
         </PaginationItem>
@@ -95,12 +89,41 @@ const TablePagination: FC<
   )
 }
 
+export type UserTableItem = {
+  id: number
+  firstName: string
+  lastName: string
+  birthDate?: string | null
+  email: string
+  privilegeLevel: PrivilegeResponse
+  role: RoleResponse
+}
+
+const rolesMapping = (role?: RoleResponse) => {
+  if (!role) return ''
+  const map: { [key in RoleResponse]: string } = {
+    ROLE_ADMIN: 'Администратор',
+    ROLE_SUPERUSER: 'Суперпользователь',
+    ROLE_USER: 'Пользователь',
+  }
+  return map[role]
+}
+
+const priviligiesMapping = (role?: PrivilegeResponse) => {
+  if (!role) return ''
+  const map: { [key in PrivilegeResponse]: string } = {
+    STANDARD: 'Стандарт',
+    VIP: 'VIP',
+    UP: 'Повышенный',
+  }
+  return map[role]
+}
+
 const UsersTable: FC<{
   pagination: PaginationParams
   loading?: boolean
-}> = ({ loading, pagination }) => {
-  if (loading) return <Spinner />
-
+  items?: UserTableItem[]
+}> = ({ loading, items, pagination }) => {
   return (
     <Card className='max-w-full w-full overflow-hidden'>
       <CardHeader className='flex flex-row items-center'>
@@ -110,54 +133,63 @@ const UsersTable: FC<{
         </div>
       </CardHeader>
       <CardContent>
-        <Table className='overflow-x-auto max-w-full'>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Имя</TableHead>
-              <TableHead>Дата рождения</TableHead>
-              <TableHead>Роль</TableHead>
-              <TableHead>Уровень привелегий</TableHead>
-              <TableHead />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>
-                  <div className='font-medium'>
-                    {user.firstName} {user.lastName}
-                  </div>
-                  <div className='text-muted-foreground inline'>{user.email}</div>
-                </TableCell>
-                <TableCell>{user.birthDate}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>
-                  <Badge>{user.privilegeLevel}</Badge>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    aria-haspopup='true'
-                    size='icon'
-                    asChild
-                    variant='ghost'>
-                    <Link
-                      to='/users/$userId/edit'
-                      params={{ userId: user.id.toString() }}>
-                      <EditIcon className='h-4 w-4' />
-                      <span className='sr-only'>Edit user</span>
-                    </Link>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <div className='mt-4 flex flex-row items-center'>
-          <TablePagination
-            size='icon'
-            pagination={pagination}
-          />
-        </div>
+        {loading && (
+          <div className='min-h-[300px]'>
+            <Spinner />
+          </div>
+        )}
+        {!loading && (
+          <>
+            <Table className='overflow-x-auto max-w-full'>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Имя</TableHead>
+                  <TableHead>Роль</TableHead>
+                  <TableHead>Уровень привелегий</TableHead>
+                  <TableHead>Дата рождения</TableHead>
+                  <TableHead />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell>
+                      <div className='font-medium'>
+                        {user.firstName} {user.lastName}
+                      </div>
+                      <div className='text-muted-foreground inline'>{user.email}</div>
+                    </TableCell>
+                    <TableCell>{rolesMapping(user.role)}</TableCell>
+                    <TableCell>
+                      <Badge>{priviligiesMapping(user.privilegeLevel)}</Badge>
+                    </TableCell>
+                    <TableCell>{user.birthDate || '-'}</TableCell>
+                    <TableCell>
+                      <Button
+                        aria-haspopup='true'
+                        size='icon'
+                        asChild
+                        variant='ghost'>
+                        <Link
+                          to='/users/$userId/edit'
+                          params={{ userId: user.id.toString() }}>
+                          <EditIcon className='h-4 w-4' />
+                          <span className='sr-only'>Edit user</span>
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <div className='mt-4 flex flex-row items-center'>
+              <TablePagination
+                size='icon'
+                pagination={pagination}
+              />
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   )

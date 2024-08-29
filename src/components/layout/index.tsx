@@ -86,9 +86,9 @@ const Header = () => {
     () =>
       menuLinks.map((item) => (
         <Link
-          activeOptions={{
-            exact: true,
-          }}
+          // activeOptions={{
+          //   exact: true,
+          // }}
           className='text-sm md:text-md text-gray-400 duration-200 hover:text-slate-900 uppercase font-bold text-foreground transition-colors hover:text-foreground'
           activeProps={{
             className: 'text-slate-900',

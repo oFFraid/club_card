@@ -1,4 +1,4 @@
 export type ArrayResponse<T> = {
-  response: T[]
+  result: T[]
   total: number
 }

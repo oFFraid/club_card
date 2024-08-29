@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
 import AuthLayout from '@/components/layout/auth-layout.tsx'
+import { useToast } from '@/components/ui'
 import { NAVIGATION_FALLBACK } from '@/consts'
 import { RegisterForm } from '@/features/auth'
 import { useRegisterMutation } from '@/store/api/auth-slice.ts'
@@ -10,12 +11,16 @@ import { z } from '@/validation/ru-zod.ts'
 const RegisterPage = () => {
   const [registerMutation, registerMutationData] = useRegisterMutation()
   const navigate = Route.useNavigate()
+  const { toast } = useToast()
 
   useEffect(() => {
-    if (registerMutationData?.error) {
-      console.error(registerMutationData?.error)
+    if (registerMutationData.isError) {
+      toast({
+        title: 'Неизвестная ошибка !',
+        variant: 'destructive',
+      })
     }
-  }, [registerMutationData?.error])
+  }, [registerMutationData.isError, toast])
 
   return (
     <AuthLayout>

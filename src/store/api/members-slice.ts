@@ -21,15 +21,22 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       query: ({ page, size }) => ({
         url: '/members',
         method: 'GET',
-        headers: {
-          'Content-Type': 'audio/x-raw-int; rate=16000',
-          'Transfer-Encoding': 'chunked',
-        },
         params: { page, size },
+      }),
+    }),
+    member: builder.query<
+      IMemberResponse,
+      {
+        id: number
+      }
+    >({
+      query: ({ id }) => ({
+        url: `/members/${id}`,
+        method: 'GET',
       }),
     }),
   }),
   overrideExisting: false,
 })
 
-export const { useProfileQuery, useMembersQuery } = extendedApiSlice
+export const { useProfileQuery, useMemberQuery, useMembersQuery } = extendedApiSlice
