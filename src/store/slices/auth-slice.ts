@@ -18,11 +18,15 @@ const authSlice = createSlice({
       const { accessToken } = payload
       state.token = accessToken
       state.isLoggedIn = true
+      console.log(accessToken)
     },
     // setToken(state, { payload }) {
     //   const { token } = payload;
     //   state.token = token;
     // },
+    setToken(state) {
+      state.token = 'invalid'
+    },
     logout(state) {
       state.isLoggedIn = initialState.isLoggedIn
       state.token = null
@@ -30,5 +34,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { login, logout } = authSlice.actions
+export const { login, logout, setToken } = authSlice.actions
 export default authSlice.reducer

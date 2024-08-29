@@ -8,7 +8,10 @@ export interface ILoginResponse {
 }
 
 export interface IRegisterPayload {
-  username: string
+  phone?: string
+  lastName?: string
+  firstName?: string
+  birthDate?: string
   email: string
   password: string
 }

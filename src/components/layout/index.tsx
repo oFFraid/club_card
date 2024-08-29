@@ -1,4 +1,4 @@
-import { Link, LinkProps, useRouter } from '@tanstack/react-router'
+import { Link, LinkProps } from '@tanstack/react-router'
 import { Menu, User } from 'lucide-react'
 import { FC, PropsWithChildren, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.tsx'
+import { useProfileQuery } from '@/store/api/members-slice.ts'
 import { logout } from '@/store/slices/auth-slice.ts'
 import { cn } from '@/utils'
 
@@ -21,9 +22,9 @@ const menuLinks: {
   link: LinkProps['to']
   label: string
 }[] = [
-  { link: '/users', label: 'Пользователи' },
   { link: '/cards', label: 'Карты' },
-  { link: '/cards/add', label: 'Редактор карт' },
+  { link: '/users', label: 'Пользователи' },
+  // { link: '/cards/add', label: 'Редактор карт' },
 ]
 
 const LogoLink: FC<
@@ -47,17 +48,10 @@ const LogoLink: FC<
 }
 
 const MiniUserProfile = () => {
+  const profileQuery = useProfileQuery()
   const dispatch = useDispatch()
-  const router = useRouter()
 
   const handleLogout = async () => {
-    await router.invalidate()
-    router.navigate({
-      to: '/login',
-      search: {
-        redirect: router.history.location.href,
-      },
-    })
     dispatch(logout())
   }
 
@@ -76,12 +70,12 @@ const MiniUserProfile = () => {
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Настройки</DropdownMenuItem>
+          {/*<DropdownMenuItem>Настройки</DropdownMenuItem>*/}
           <DropdownMenuItem onClick={handleLogout}>Выход</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <div className='text-sm flex flex-col items-start'>
-        <span>Дмитрий</span> <span>Свиридов</span>
+        <span>{profileQuery.data?.firstName}</span> <span>{profileQuery.data?.lastName}</span>
       </div>
     </div>
   )

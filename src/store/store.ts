@@ -4,11 +4,6 @@ import storage from 'redux-persist/lib/storage'
 
 import { apiSlice } from './api/api-slice'
 import authReducer from './slices/auth-slice'
-import copiedObjectReducer from './slices/copied-objects-slice'
-import fontListReducer from './slices/font-list-slice'
-import frameReducer from './slices/frame-slice'
-import selectedObjectReducer from './slices/selected-objects-slice'
-import stageObjectReducer from './slices/stage-object-slice'
 
 const persistConfig = {
   key: 'root',
@@ -20,12 +15,7 @@ const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     [apiSlice.reducerPath]: apiSlice.reducer,
-    frame: frameReducer,
-    stage: stageObjectReducer,
-    selected: selectedObjectReducer,
     auth: authReducer,
-    fontList: fontListReducer,
-    copied: copiedObjectReducer,
   }),
 )
 

@@ -6,40 +6,42 @@ import { apiSlice } from './api-slice'
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<IRegisterResponse, IRegisterPayload>({
-      query: ({ username, email, password }) => ({
-        url: 'auth/sign-up',
+      query: ({ firstName, lastName, phone, birthDate, email, password }) => ({
+        url: 'register',
         method: 'POST',
-        body: { username, email, password },
+        body: { firstName, lastName, email, password, phone, birthDate },
       }),
     }),
     login: builder.mutation<ILoginResponse, ILoginPayload>({
       query: ({ email, password }) => ({
         url: 'login',
         method: 'POST',
-        body: { username: email, password },
+        body: { email, password },
       }),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          dispatch(login(data))
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (_) {
-          // console.log(error);
+          dispatch(
+            login({
+              accessToken: data.accessToken,
+            }),
+          )
+        } catch (error) {
+          console.error(error)
         }
       },
-      invalidatesTags: ['Canvas'],
     }),
     refresh: builder.mutation({
       query: () => ({
-        url: 'auth/refresh',
+        url: 'refresh',
         method: 'POST',
       }),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(login(data))
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (_) {
+        } catch (error) {
+          console.error(error)
           dispatch(logout())
         }
       },

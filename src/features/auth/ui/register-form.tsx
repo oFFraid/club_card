@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import logoSvg from '@/assets/images/logo.svg'
 import {
   Button,
   Card,
@@ -60,8 +61,16 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
   return (
     <Card className='w-full'>
       <CardHeader>
-        <CardTitle className='text-3xl mb-1 text-center font-medium'>Регистрация</CardTitle>
-        <CardDescription className='text-center'>Заполните поля</CardDescription>
+        <CardTitle className=' mb-1 flex gap-5 items-center justify-center'>
+          <div className='w-[70px]'>
+            <img
+              className='w-fill h-full object-cover'
+              src={logoSvg}
+              alt='t1 logo'
+            />
+          </div>
+        </CardTitle>
+        <CardDescription className='text-center text-2xl font-bold text-slate-900'>Регистрация</CardDescription>
       </CardHeader>
       <CardContent className='min-w-40'>
         <Form {...form}>
@@ -70,7 +79,7 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
             className='space-y-8'>
             <fieldset disabled={form.formState.isSubmitting}>
               <div className='grid gap-4'>
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <FormField
                     control={form.control}
                     name='firstName'
@@ -103,7 +112,7 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
                   />
                 </div>
 
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <FormField
                     control={form.control}
                     name='password'
@@ -140,17 +149,14 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
                     <FormItem>
                       <FormLabel required>Электронная почта</FormLabel>
                       <FormControl>
-                        <Input
-                          // type='email'
-                          {...field}
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <div className='grid grid-cols-2 gap-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <FormField
                     control={form.control}
                     name='phone'

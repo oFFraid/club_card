@@ -1,32 +1,39 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import Card from '@/components/cards-templates/card.tsx'
 import SecondaryCard from '@/components/cards-templates/secondaryCard/secondaryCard.tsx'
 import { CardInfo } from '@/components/cards-templates/types.ts'
 import Layout from '@/components/layout'
 import { Button } from '@/components/ui'
-
-const info: CardInfo = {
-  createdAt: '23.02.24',
-  email: 'dima.twin@mail',
-  firstName: 'Дмитрий',
-  id: 'ad2qdad-ada2d-a2da',
-  lastName: 'Свиридов',
-  privilege: 'VIP',
-  phone: '+7 937 092 12-57',
-  qrLink:
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/QR_Code_Example.svg/1024px-QR_Code_Example.svg.png',
-}
+import { useProfileQuery } from '@/store/api/members-slice.ts'
+import { setToken } from '@/store/slices/auth-slice.ts'
 
 const cardComponents = [Card, SecondaryCard]
 
 const CardsPage = () => {
   const [selected, setSelected] = useState<number>(0)
+  const profileQuery = useProfileQuery()
+  const dispatch = useDispatch()
+  if (profileQuery.isLoading) return null
+
+  const info: CardInfo = {
+    createdAt: profileQuery.data?.birthDay || '',
+    email: profileQuery.data?.email || '',
+    firstName: profileQuery.data?.firstName || '',
+    id: profileQuery.data?.id.toString() || '',
+    lastName: profileQuery.data?.lastName || '',
+    privilege: profileQuery.data?.privilege || '',
+    phone: profileQuery.data?.phone || '',
+    qrLink:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/QR_Code_Example.svg/1024px-QR_Code_Example.svg.png',
+  }
   const Card = cardComponents[selected]
 
   return (
     <Layout>
+      <Button onClick={() => dispatch(setToken())}>make token invalid</Button>
       <div>
         <div className='text-xl mb-3 uppercase'>Шаблоны карт</div>
         <div className='flex gap-2 mb-4'>
@@ -35,7 +42,7 @@ const CardsPage = () => {
               key={i}
               variant={selected === i ? 'default' : 'outline'}
               onClick={() => setSelected(i)}>
-              {i + 1}
+              {i == 0 ? 'Вип' : 'Стандарт'}
             </Button>
           ))}
         </div>

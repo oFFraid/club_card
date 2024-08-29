@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router'
 import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
+import logoSvg from '@/assets/images/logo.svg'
 import {
   Button,
   Card,
@@ -40,8 +41,16 @@ export const LoginForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props) =
   return (
     <Card className='w-full'>
       <CardHeader>
-        <CardTitle className='text-3xl mb-1 text-center font-medium'>Вход</CardTitle>
-        <CardDescription className='text-center'>С помощью</CardDescription>
+        <CardTitle className=' mb-1 flex gap-5 items-center justify-center'>
+          <div className='w-[70px]'>
+            <img
+              className='w-fill h-full object-cover'
+              src={logoSvg}
+              alt='t1 logo'
+            />
+          </div>
+        </CardTitle>
+        <CardDescription className='text-center text-2xl font-bold text-slate-900'>Вход</CardDescription>
       </CardHeader>
       <CardContent className='min-w-40'>
         <Form {...form}>

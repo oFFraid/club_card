@@ -1,6 +1,12 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
+import Spinner from '@/components/ui/spinner.tsx'
+import { useProfileQuery } from '@/store/api/members-slice.ts'
+
 const AuthLayout = () => {
+  const profileQuery = useProfileQuery()
+
+  if (profileQuery.isLoading) return <Spinner />
   return <Outlet />
 }
 
