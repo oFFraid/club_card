@@ -1,0 +1,6 @@
+services:
+  frontend:
+    image: jubastik/24_frontend_t1
+    container_name: 24_frontend_t1
+    ports:
+      - '1333:80'`
