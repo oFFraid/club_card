@@ -33,7 +33,7 @@ const CardsPage = () => {
 
   return (
     <Layout>
-      {true && <Button onClick={() => dispatch(setToken())}>make token invalid</Button>}
+      {false && <Button onClick={() => dispatch(setToken())}>make token invalid</Button>}
       <div>
         <div className='text-xl mb-3 uppercase'>Шаблоны карт</div>
         <div className='flex gap-2 mb-4'>

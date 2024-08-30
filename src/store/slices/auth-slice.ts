@@ -20,10 +20,6 @@ const authSlice = createSlice({
       state.isLoggedIn = true
       console.log(accessToken)
     },
-    // setToken(state, { payload }) {
-    //   const { token } = payload;
-    //   state.token = token;
-    // },
     setToken(state) {
       state.token = 'invalid'
     },
