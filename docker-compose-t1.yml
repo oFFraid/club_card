@@ -1,0 +1,6 @@
+services:
+  frontend:
+    image: 10.4.56.75:32768/24_frontend_t1
+    container_name: 24_frontend_t1
+    ports:
+      - '80:80'
