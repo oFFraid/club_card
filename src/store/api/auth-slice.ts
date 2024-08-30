@@ -16,6 +16,8 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       query: ({ email, password }) => ({
         url: 'login',
         method: 'POST',
+        credentials: 'include',
+
         body: { email, password },
       }),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
