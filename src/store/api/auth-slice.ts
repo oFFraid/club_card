@@ -16,8 +16,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       query: ({ email, password }) => ({
         url: 'login',
         method: 'POST',
-        credentials: 'include',
-
         body: { email, password },
       }),
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
@@ -48,14 +46,22 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
-    verifyEmail: builder.mutation<unknown, string>({
-      query: (token) => ({
-        url: `auth/verify-email`,
-        method: 'POST',
-        body: { token },
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: `logout`,
+        method: 'GET',
       }),
+
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          dispatch(logout())
+        } catch {
+          console.log('error')
+        }
+      },
     }),
   }),
 })
 
-export const { useRegisterMutation, useLoginMutation, useRefreshMutation, useVerifyEmailMutation } = extendedApiSlice
+export const { useRegisterMutation, useLoginMutation, useRefreshMutation, useLogoutMutation } = extendedApiSlice

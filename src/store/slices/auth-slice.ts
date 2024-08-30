@@ -18,7 +18,6 @@ const authSlice = createSlice({
       const { accessToken } = payload
       state.token = accessToken
       state.isLoggedIn = true
-      console.log(accessToken)
     },
     setToken(state) {
       state.token = 'invalid'

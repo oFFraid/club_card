@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
+import { Route as ForbiddenImport } from './routes/forbidden'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthMainImport } from './routes/_auth/main'
@@ -30,6 +31,11 @@ const RegisterRoute = RegisterImport.update({
 
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ForbiddenRoute = ForbiddenImport.update({
+  path: '/forbidden',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -84,6 +90,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/forbidden': {
+      id: '/forbidden'
+      path: '/forbidden'
+      fullPath: '/forbidden'
+      preLoaderRoute: typeof ForbiddenImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -149,6 +162,7 @@ export const routeTree = rootRoute.addChildren({
     AuthUsersIndexRoute,
     AuthUsersUserIdEditRoute,
   }),
+  ForbiddenRoute,
   LoginRoute,
   RegisterRoute,
 })
@@ -163,6 +177,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_auth",
+        "/forbidden",
         "/login",
         "/register"
       ]
@@ -179,6 +194,9 @@ export const routeTree = rootRoute.addChildren({
         "/_auth/users/",
         "/_auth/users/$userId/edit"
       ]
+    },
+    "/forbidden": {
+      "filePath": "forbidden.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

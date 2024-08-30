@@ -6,9 +6,10 @@ export abstract class DateFormatter {
       day: 'numeric',
     })
   }
+
   static yyyymmdd = (date?: Date) => {
-    if (!date) return
-    return date.toISOString().split('T')[0]
+    if (!date) return undefined
+    return date.toJSON().slice(0, 10)
   }
 }
 

@@ -1,1 +1,5 @@
-export { default as UsersTable } from './ui/UsersTable'
+export { default as UserBlockButton } from './ui/block-button.tsx'
+export { default as UsersPrivilegeChangesSelect } from './ui/privilege-change-select.tsx'
+export { default as UsersRolesChangesSelect } from './ui/role-change-select'
+export { default as UsersDescriptionCard } from './ui/user-description-card.tsx'
+export { default as UsersTable } from './ui/users-table.tsx'

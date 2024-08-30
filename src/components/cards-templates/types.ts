@@ -1,3 +1,5 @@
+import { PrivilegeResponse, RoleResponse } from '@/types/members.ts'
+
 export type CardInfo = {
   firstName: string
   lastName: string
@@ -5,6 +7,7 @@ export type CardInfo = {
   id: string
   phone?: string
   createdAt: string
-  privilege: string
-  qrLink: string
+  privilege: PrivilegeResponse
+  locked: boolean
+  role: RoleResponse
 }

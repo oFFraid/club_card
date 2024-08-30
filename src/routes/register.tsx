@@ -26,14 +26,18 @@ const RegisterPage = () => {
     <AuthLayout>
       <RegisterForm
         onSubmit={async (data) => {
-          await registerMutation({
-            password: data.password,
-            email: data.email,
-            lastName: data.lastName,
-            firstName: data.firstName,
-            phone: data.phone,
-          })
-          await navigate({ to: '/login' })
+          try {
+            await registerMutation({
+              password: data.password,
+              email: data.email,
+              lastName: data.lastName,
+              firstName: data.firstName,
+              phone: data.phone,
+            }).unwrap()
+            await navigate({ to: '/login' })
+          } catch {
+            /* empty */
+          }
         }}
       />
     </AuthLayout>

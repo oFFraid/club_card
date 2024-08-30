@@ -1,5 +1,7 @@
+import { QRCodeSVG } from 'qrcode.react'
 import { FC } from 'react'
 
+import { privilegesMapping, rolesMapping } from '@/consts'
 import { cn } from '@/utils'
 
 import commonStyles from '../common.module.css'
@@ -22,10 +24,14 @@ const Card: FC<{
               styles.personalIntro,
               'aspect-square w-1/2 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
             )}>
-            <img
-              className='w-full h-full object-fill'
-              src={info.qrLink}
-              alt='qr code link'
+            <QRCodeSVG
+              className='h-full w-full object-cover'
+              value={JSON.stringify({
+                email: info.email,
+                locked: info.locked,
+                role: info.role,
+                privilege: info.privilege,
+              })}
             />
           </div>
         </div>
@@ -37,9 +43,9 @@ const Card: FC<{
               {info.firstName} {info.lastName}
             </p>
             <p className='text-xs sm:font-bold mb-2'>
-              {info.privilege} {info.createdAt}
+              {privilegesMapping(info.privilege)} {info.createdAt}
             </p>
-            <p className='text-xs sm:text-sm'>{info.email}</p>
+            <p className='text-xs sm:text-sm'>{rolesMapping(info.role)}</p>
             <p className='text-xs sm:text-sm'>{info.phone}</p>
             <p className='mt-2 text-xs hidden sm:block xs:text-sm'>{info.id}</p>
           </div>

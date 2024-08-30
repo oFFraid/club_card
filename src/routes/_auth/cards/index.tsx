@@ -2,34 +2,34 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import Card from '@/components/cards-templates/card.tsx'
-import SecondaryCard from '@/components/cards-templates/secondaryCard/secondaryCard.tsx'
+import { PrimaryCard, SecondaryCard } from '@/components/cards-templates'
 import { CardInfo } from '@/components/cards-templates/types.ts'
 import Layout from '@/components/layout'
 import { Button } from '@/components/ui'
 import { useProfileQuery } from '@/store/api/members-slice.ts'
 import { setToken } from '@/store/slices/auth-slice.ts'
 
-const cardComponents = [Card, SecondaryCard]
+const cardComponents = [PrimaryCard, SecondaryCard]
 
 const CardsPage = () => {
   const [selected, setSelected] = useState<number>(0)
   const profileQuery = useProfileQuery()
-  const dispatch = useDispatch()
-  if (profileQuery.isLoading) return null
 
-  const info: CardInfo = {
-    createdAt: profileQuery.data?.birthDay || '',
-    email: profileQuery.data?.email || '',
-    firstName: profileQuery.data?.firstName || '',
-    id: profileQuery.data?.id.toString() || '',
-    lastName: profileQuery.data?.lastName || '',
-    privilege: profileQuery.data?.privilege || '',
-    phone: profileQuery.data?.phone || '',
-    qrLink:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/QR_Code_Example.svg/1024px-QR_Code_Example.svg.png',
+  const dispatch = useDispatch()
+  if (profileQuery.isLoading || !profileQuery.data) return null
+
+  const cardInfo: CardInfo = {
+    locked: profileQuery.data.locked,
+    role: profileQuery.data.role,
+    createdAt: profileQuery.data.birthDay || '',
+    email: profileQuery.data.email,
+    firstName: profileQuery.data.firstName,
+    id: profileQuery.data?.id.toString(),
+    lastName: profileQuery.data.lastName,
+    privilege: profileQuery.data.privilege,
   }
-  const Card = cardComponents[selected]
+
+  const CardComponent = cardComponents[selected]
 
   return (
     <Layout>
@@ -52,7 +52,7 @@ const CardsPage = () => {
             style={{
               aspectRatio: 390 / 220,
             }}>
-            <Card info={info} />
+            <CardComponent info={cardInfo} />
           </div>
         </div>
       </div>

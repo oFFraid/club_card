@@ -1,12 +1,17 @@
 import { createFileRoute, Navigate, useRouter } from '@tanstack/react-router'
-import { AlertOctagon, ChevronLeft } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 
 import Layout from '@/components/layout'
 import { Button } from '@/components/ui/button.tsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Spinner from '@/components/ui/spinner.tsx'
 import { NAVIGATION_FALLBACK } from '@/consts'
-import { UserForm } from '@/features/users/ui/UserForm.tsx'
+import {
+  UserBlockButton,
+  UsersDescriptionCard,
+  UsersPrivilegeChangesSelect,
+  UsersRolesChangesSelect,
+} from '@/features/users'
 import { useMemberQuery } from '@/store/api/members-slice.ts'
 import { cn } from '@/utils'
 
@@ -18,13 +23,13 @@ const UserEditPage = () => {
     id: +params.userId,
   })
 
-  // if (user.isLoading) return <Spinner />
   if (user.error) return <Navigate to={NAVIGATION_FALLBACK} />
+  if (!user.data) return null
 
   return (
     <Layout>
       {user.isLoading && <Spinner />}
-      {!user.isLoading && (
+      {!user.isLoading && !!user.data && (
         <div>
           <div className={cn('flex items-center gap-2 py-3')}>
             <Button
@@ -37,30 +42,39 @@ const UserEditPage = () => {
             </span>
           </div>
           <div className='md:grid md:grid-cols-2 gap-4'>
-            <UserForm
-              initialValues={{
-                firstName: user.data?.firstName || '',
-                lastName: user.data?.lastName || '',
-                email: user.data?.email,
-                phone: user.data?.phone ? user.data.phone.replace(/[^0-9.]/g, '') : '',
-                birthDate: user.data?.birthDay ? new Date(user.data?.birthDay) : undefined,
-              }}
-              onSubmit={console.log}
+            <UsersDescriptionCard
+              user={user.data}
+              className='mt-5 md:mt-0'
             />
+            {/*<UserForm*/}
+            {/*  initialValues={{*/}
+            {/*    firstName: user.data?.firstName || '',*/}
+            {/*    lastName: user.data?.lastName || '',*/}
+            {/*    email: user.data?.email,*/}
+            {/*    phone: user.data?.phone ? user.data.phone.replace(/[^0-9.]/g, '') : '',*/}
+            {/*    birthDate: user.data?.birthDay ? new Date(user.data?.birthDay) : undefined,*/}
+            {/*  }}*/}
+            {/*  onSubmit={console.log}*/}
+            {/*/>*/}
 
             <Card className='w-full mt-5 md:mt-0'>
               <CardHeader>
-                <CardTitle className='text-xl mb-1 font-medium'>Клубная карта</CardTitle>
+                <CardTitle className='text-xl mb-1 font-medium'>Действия</CardTitle>
               </CardHeader>
               <CardContent className='min-w-40 flex flex-col gap-4 h-full'>
-                Здесь будет карта
-                <div className='grid flex-1 grid-cols-2 gap-2 mt-5'>
-                  <Button
-                    variant='destructive'
-                    className='w-full'>
-                    <AlertOctagon className='mr-2 h-4 w-4' />
-                    Заблокировать
-                  </Button>
+                <div className='grid grid-cols-2 gap-5 mt-5'>
+                  <UsersRolesChangesSelect
+                    userId={user.data.id}
+                    currentRole={user.data.role}
+                  />
+                  <UsersPrivilegeChangesSelect
+                    userId={user.data.id}
+                    currentPrivilege={user.data.privilege}
+                  />
+                  <UserBlockButton
+                    locked={user.data.locked}
+                    userId={user.data.id}
+                  />
                 </div>
               </CardContent>
             </Card>

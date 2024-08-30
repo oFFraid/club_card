@@ -28,6 +28,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination.tsx'
 import Spinner from '@/components/ui/spinner.tsx'
+import { privilegesMapping, rolesMapping } from '@/consts'
 import { PaginationParams, usePagination } from '@/hooks/use-pagination.ts'
 import { PrivilegeResponse, RoleResponse } from '@/types/members.ts'
 
@@ -99,31 +100,12 @@ export type UserTableItem = {
   role: RoleResponse
 }
 
-const rolesMapping = (role?: RoleResponse) => {
-  if (!role) return ''
-  const map: { [key in RoleResponse]: string } = {
-    ROLE_ADMIN: 'Администратор',
-    ROLE_SUPERUSER: 'Суперпользователь',
-    ROLE_USER: 'Пользователь',
-  }
-  return map[role]
-}
-
-const priviligiesMapping = (role?: PrivilegeResponse) => {
-  if (!role) return ''
-  const map: { [key in PrivilegeResponse]: string } = {
-    STANDARD: 'Стандарт',
-    VIP: 'VIP',
-    UP: 'Повышенный',
-  }
-  return map[role]
-}
-
 const UsersTable: FC<{
   pagination: PaginationParams
   loading?: boolean
   items?: UserTableItem[]
-}> = ({ loading, items, pagination }) => {
+  canEdit?: (item: UserTableItem) => boolean
+}> = ({ loading, canEdit = () => true, items, pagination }) => {
   return (
     <Card className='max-w-full w-full overflow-hidden'>
       <CardHeader className='flex flex-row items-center'>
@@ -161,23 +143,25 @@ const UsersTable: FC<{
                     </TableCell>
                     <TableCell>{rolesMapping(user.role)}</TableCell>
                     <TableCell>
-                      <Badge>{priviligiesMapping(user.privilegeLevel)}</Badge>
+                      <Badge>{privilegesMapping(user.privilegeLevel)}</Badge>
                     </TableCell>
                     <TableCell>{user.birthDate || '-'}</TableCell>
-                    <TableCell>
-                      <Button
-                        aria-haspopup='true'
-                        size='icon'
-                        asChild
-                        variant='ghost'>
-                        <Link
-                          to='/users/$userId/edit'
-                          params={{ userId: user.id.toString() }}>
-                          <EditIcon className='h-4 w-4' />
-                          <span className='sr-only'>Edit user</span>
-                        </Link>
-                      </Button>
-                    </TableCell>
+                    {canEdit && canEdit(user) && (
+                      <TableCell>
+                        <Button
+                          aria-haspopup='true'
+                          size='icon'
+                          asChild
+                          variant='ghost'>
+                          <Link
+                            to='/users/$userId/edit'
+                            params={{ userId: user.id.toString() }}>
+                            <EditIcon className='h-4 w-4' />
+                            <span className='sr-only'>Edit user</span>
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

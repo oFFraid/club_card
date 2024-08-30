@@ -1,11 +1,13 @@
-import { IdCard, LucideMail, PhoneIcon } from 'lucide-react'
+import { IdCard, LucideUser, PhoneIcon } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
 import { FC } from 'react'
 
+import { privilegesMapping, rolesMapping } from '@/consts'
 import { cn } from '@/utils'
 
-import commonStyles from './common.module.css'
+import commonStyles from '../common.module.css'
+import { CardInfo } from '../types.ts'
 import styles from './style.module.css'
-import { CardInfo } from './types'
 
 const Card: FC<{
   info: CardInfo
@@ -30,11 +32,11 @@ const Card: FC<{
           </div>
           <div className={cn(styles.infoGrid, 'p-3 overflow-auto')}>
             <div>
-              <h2 className='text-2xl'>
+              <h2 className='text-3xl'>
                 {info.firstName} {info.lastName}
               </h2>
               {info.createdAt}
-              <h5 className='text-lg font-bold'>{info.privilege}</h5>
+              <h5 className='text-xl font-bold'>{privilegesMapping(info.privilege)}</h5>
             </div>
             {info.phone && (
               <div className='flex text-sm md:text-xl flex-col gap-1 items-end justify-start'>
@@ -50,8 +52,8 @@ const Card: FC<{
               </div>
 
               <div className='flex gap-1 md:text-xl flex-col items-end justify-start'>
-                <LucideMail />
-                <p>{info.email}</p>
+                <LucideUser />
+                <p>{rolesMapping(info.role)}</p>
               </div>
             </div>
           </div>
@@ -65,13 +67,17 @@ const Card: FC<{
           </div>
           <div
             className={cn(
-              'aspect-square w-1/2 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
+              'aspect-square w-1/2 p-2 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
               styles.blur,
             )}>
-            <img
+            <QRCodeSVG
               className='h-full w-full object-cover'
-              alt='code'
-              src={info.qrLink}
+              value={JSON.stringify({
+                email: info.email,
+                locked: info.locked,
+                role: info.role,
+                privilege: info.privilege,
+              })}
             />
           </div>
         </div>

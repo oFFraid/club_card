@@ -1,7 +1,6 @@
 import { Link, LinkProps } from '@tanstack/react-router'
 import { Menu, User } from 'lucide-react'
 import { FC, PropsWithChildren, useMemo } from 'react'
-import { useDispatch } from 'react-redux'
 
 import logoImage from '@/assets/images/t1-flag.png'
 import { Button } from '@/components/ui/button.tsx'
@@ -14,16 +13,18 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.tsx'
+import { useLogoutMutation } from '@/store/api/auth-slice.ts'
 import { useProfileQuery } from '@/store/api/members-slice.ts'
-import { logout } from '@/store/slices/auth-slice.ts'
+import { RoleResponse } from '@/types/members.ts'
 import { cn } from '@/utils'
 
 const menuLinks: {
   link: LinkProps['to']
   label: string
+  roles: RoleResponse[]
 }[] = [
-  { link: '/cards', label: 'Карты' },
-  { link: '/users', label: 'Пользователи' },
+  { link: '/cards', label: 'Карты', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN', 'ROLE_USER'] },
+  { link: '/users', label: 'Пользователи', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN'] },
   // { link: '/cards/add', label: 'Редактор карт' },
 ]
 
@@ -49,10 +50,10 @@ const LogoLink: FC<
 
 const MiniUserProfile = () => {
   const profileQuery = useProfileQuery()
-  const dispatch = useDispatch()
+  const [logout] = useLogoutMutation()
 
   const handleLogout = async () => {
-    dispatch(logout())
+    logout()
   }
 
   return (
@@ -82,23 +83,31 @@ const MiniUserProfile = () => {
 }
 
 const Header = () => {
+  const profileQuery = useProfileQuery()
+
   const menuItems = useMemo(
     () =>
-      menuLinks.map((item) => (
-        <Link
-          // activeOptions={{
-          //   exact: true,
-          // }}
-          className='text-sm md:text-md text-gray-400 duration-200 hover:text-slate-900 uppercase font-bold text-foreground transition-colors hover:text-foreground'
-          activeProps={{
-            className: 'text-slate-900',
-          }}
-          to={item.link}
-          key={item.label}>
-          <span>{item.label}</span>
-        </Link>
-      )),
-    [],
+      menuLinks.map((item) => {
+        if (!item.roles?.find((e) => e === profileQuery.data?.role)) {
+          return null
+        }
+
+        return (
+          <Link
+            // activeOptions={{
+            //   exact: true,
+            // }}
+            className='text-sm md:text-md text-gray-400 duration-200 hover:text-slate-900 uppercase font-bold text-foreground transition-colors hover:text-foreground'
+            activeProps={{
+              className: 'text-slate-900',
+            }}
+            to={item.link}
+            key={item.label}>
+            <span>{item.label}</span>
+          </Link>
+        )
+      }),
+    [profileQuery.data?.role],
   )
 
   return (

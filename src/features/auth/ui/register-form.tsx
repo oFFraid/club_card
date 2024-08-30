@@ -188,7 +188,7 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
                             type='date'
                             max={DateFormatter.yyyymmdd(new Date())}
                             value={DateFormatter.yyyymmdd(value)}
-                            onChange={(e) => onChange(new Date(e.target.value))}
+                            onChange={(e) => onChange(e.target.valueAsDate)}
                             {...field}
                           />
                         </FormControl>
