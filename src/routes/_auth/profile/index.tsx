@@ -7,6 +7,7 @@ import { useToast } from '@/components/ui'
 import { Button } from '@/components/ui/button.tsx'
 import Spinner from '@/components/ui/spinner.tsx'
 import { NAVIGATION_FALLBACK } from '@/consts'
+import { UsersDescriptionCard } from '@/features/users'
 import { UserForm } from '@/features/users/ui/user-form'
 import { useProfileQuery, useUpdateProfileMutation } from '@/store/api/members-slice.ts'
 import { cn } from '@/utils'
@@ -44,6 +45,17 @@ const MePage = () => {
             <span className='text-sm sm:text-xl md:text-2xl font-bold'>Профиль</span>
           </div>
           <div className='md:grid md:grid-cols-2 mt-5 gap-4'>
+            <UsersDescriptionCard
+              user={{
+                firstName: profileQuery.data.firstName,
+                lastName: profileQuery.data.lastName,
+                email: profileQuery.data.email,
+                phone: profileQuery.data.phone,
+                locked: profileQuery.data.locked,
+                role: profileQuery.data.role,
+                privilege: profileQuery.data.privilege,
+              }}
+            />
             <UserForm
               initialValues={{
                 firstName: profileQuery.data?.firstName || '',

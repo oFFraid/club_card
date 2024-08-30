@@ -157,28 +157,6 @@ export const UserForm: FC<{ onSubmit: SubmitHandler<IFormValues>; initialValues?
                   />
                 </div>
                 <div className='grid grid-cols-1 gap-2 mt-5'>
-                  {/*<AlertDialog>*/}
-                  {/*  <AlertDialogTrigger asChild>*/}
-                  {/*    <Button*/}
-                  {/*      variant='destructive'*/}
-                  {/*      className='w-full'>*/}
-                  {/*      <Delete className='mr-2 h-4 w-4' />*/}
-                  {/*      Удалить*/}
-                  {/*    </Button>*/}
-                  {/*  </AlertDialogTrigger>*/}
-                  {/*  <AlertDialogContent>*/}
-                  {/*    <AlertDialogHeader>*/}
-                  {/*      <AlertDialogTitle>Вы уверены?</AlertDialogTitle>*/}
-                  {/*      <AlertDialogDescription>*/}
-                  {/*        Это действие невозможно отменить. Это приведет к безвозвратному удалению учетной записи.*/}
-                  {/*      </AlertDialogDescription>*/}
-                  {/*    </AlertDialogHeader>*/}
-                  {/*    <AlertDialogFooter>*/}
-                  {/*      <AlertDialogCancel>Отмена</AlertDialogCancel>*/}
-                  {/*      <AlertDialogAction>Продолжить</AlertDialogAction>*/}
-                  {/*    </AlertDialogFooter>*/}
-                  {/*  </AlertDialogContent>*/}
-                  {/*</AlertDialog>*/}
                   <Button
                     type='submit'
                     className='w-full'>

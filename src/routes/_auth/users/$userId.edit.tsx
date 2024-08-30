@@ -52,14 +52,17 @@ const UserEditPage = () => {
               </CardHeader>
               <CardContent className='min-w-40 flex flex-col gap-4 h-full'>
                 <div className='grid grid-cols-2 gap-5 mt-5'>
-                  <div className='flex flex-col gap-2'>
-                    <Label>Роль</Label>
-                    <UsersRolesChangesSelect
-                      roleOfCurrentUser={roleOfCurrentUser}
-                      userId={user.data.id}
-                      currentRole={user.data.role}
-                    />
-                  </div>
+                  {roleOfCurrentUser === 'ROLE_ADMIN' && user.data.role === 'ROLE_ADMIN' ? null : (
+                    <div className='flex flex-col gap-2'>
+                      <Label>Роль</Label>
+                      <UsersRolesChangesSelect
+                        roleOfCurrentUser={roleOfCurrentUser}
+                        userId={user.data.id}
+                        currentRole={user.data.role}
+                      />
+                    </div>
+                  )}
+
                   <div className='flex flex-col gap-2'>
                     <Label>Привилегия</Label>
                     <UsersPrivilegeChangesSelect
@@ -67,10 +70,12 @@ const UserEditPage = () => {
                       currentPrivilege={user.data.privilege}
                     />
                   </div>
-                  <UserBlockButton
-                    locked={user.data.locked}
-                    userId={user.data.id}
-                  />
+                  {roleOfCurrentUser === 'ROLE_ADMIN' && user.data.role === 'ROLE_ADMIN' ? null : (
+                    <UserBlockButton
+                      locked={user.data.locked}
+                      userId={user.data.id}
+                    />
+                  )}
                 </div>
               </CardContent>
             </Card>
