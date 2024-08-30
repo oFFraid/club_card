@@ -1,7 +1,6 @@
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-import { Connect, defineConfig, HttpProxy, loadEnv } from 'vite'
+import { Connect, defineConfig, HttpProxy } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const getPostData = (req: Connect.IncomingMessage) => {
@@ -53,25 +52,6 @@ const proxyLogger = (proxy: HttpProxy.Server) => {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  const envDir = resolve('./env')
-  const env = loadEnv(mode, envDir)
-  console.log(env)
-  return {
-    plugins: [TanStackRouterVite(), react(), tsconfigPaths()],
-    // server: {
-    //   proxy: {
-    //     '/api': {
-    //       target: env.VITE_API_URL,
-    //       changeOrigin: true,
-    //       configure: (proxy) => proxyLogger(proxy),
-    //       rewrite: (path) => {
-    //         console.log(path, path.replace(/^\/api/, ''))
-    //         return env.VITE_API_URL + path.replace(/^\/api/, '')
-    //       },
-    //     },
-    //   },
-    // },
-    envDir: envDir,
-  }
+export default defineConfig({
+  plugins: [TanStackRouterVite(), react(), tsconfigPaths()],
 })
