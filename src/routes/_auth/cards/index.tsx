@@ -35,8 +35,8 @@ const CardsPage = () => {
     <Layout>
       {false && <Button onClick={() => dispatch(setToken())}>make token invalid</Button>}
       <div>
-        <div className='text-xl mb-3 uppercase'>Шаблоны карт</div>
-        <div className='flex gap-2 mb-4'>
+        <div className='text-xl mb-5 uppercase'>Шаблоны карт</div>
+        <div className='flex gap-2 mb-4 mt-5'>
           {new Array(cardComponents.length).fill(0).map((_, i) => (
             <Button
               key={i}

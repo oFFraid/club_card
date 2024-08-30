@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 
 import { useToast } from '@/components/ui'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
@@ -9,10 +9,22 @@ import { RoleResponse } from '@/types/members.ts'
 const RoleChangeSelect: FC<{
   userId: number
   currentRole: RoleResponse
-}> = ({ userId, currentRole }) => {
+  roleOfCurrentUser?: RoleResponse
+}> = ({ userId, currentRole, roleOfCurrentUser }) => {
   const [changeRoleMutation, changeRoleMutationInfo] = useChangeMemberRoleMutation()
   const { toast } = useToast()
-  const allRoles: RoleResponse[] = ['ROLE_USER', 'ROLE_ADMIN']
+
+  const allRoles: RoleResponse[] = useMemo(() => {
+    if (roleOfCurrentUser === 'ROLE_SUPERUSER') {
+      return ['ROLE_USER', 'ROLE_ADMIN']
+    }
+
+    if (roleOfCurrentUser === 'ROLE_ADMIN' && currentRole === 'ROLE_ADMIN') {
+      return ['ROLE_ADMIN']
+    }
+
+    return ['ROLE_USER', 'ROLE_ADMIN']
+  }, [currentRole, roleOfCurrentUser])
 
   useEffect(() => {
     if (changeRoleMutationInfo.isError) {

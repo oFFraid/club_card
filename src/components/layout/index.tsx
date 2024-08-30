@@ -52,9 +52,7 @@ const MiniUserProfile = () => {
   const profileQuery = useProfileQuery()
   const [logout] = useLogoutMutation()
 
-  const handleLogout = async () => {
-    logout()
-  }
+  const handleLogout = () => logout()
 
   return (
     <div className='flex gap-3 items-center'>
@@ -71,7 +69,9 @@ const MiniUserProfile = () => {
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {/*<DropdownMenuItem>Настройки</DropdownMenuItem>*/}
+          <DropdownMenuItem asChild>
+            <Link to='/profile'>Профиль</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={handleLogout}>Выход</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

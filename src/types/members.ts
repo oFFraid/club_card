@@ -24,3 +24,12 @@ export interface IMemberResponse {
   birthDay?: string | null
   phone?: string | null
 }
+
+export interface IMemberUpdatePayload {
+  password?: string
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string | null
+  birthDate?: string | null
+}

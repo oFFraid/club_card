@@ -1,18 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Delete, Save } from 'lucide-react'
+import { Save } from 'lucide-react'
 import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
   Button,
   Card,
   CardContent,
@@ -37,17 +28,14 @@ import {
   phoneValidator,
 } from '@/validation'
 import { z } from '@/validation/ru-zod.ts'
-import { passwordValidationSchema } from '@/validation/zod-password-validation-schema'
 
-const formSchema = passwordValidationSchema.and(
-  z.object({
-    email: emailValidator,
-    firstName: firstNameValidator,
-    lastName: lastNameValidator,
-    birthDate: birthDateValidator.optional(),
-    phone: looseOptional(phoneValidator),
-  }),
-)
+const formSchema = z.object({
+  email: emailValidator,
+  firstName: firstNameValidator,
+  lastName: lastNameValidator,
+  birthDate: birthDateValidator.optional(),
+  phone: looseOptional(phoneValidator),
+})
 
 export type IFormValues = z.infer<typeof formSchema>
 
@@ -56,12 +44,14 @@ export const UserForm: FC<{ onSubmit: SubmitHandler<IFormValues>; initialValues?
     resolver: zodResolver(formSchema),
     defaultValues: props.initialValues || {
       email: '',
-      password: '',
+      // password: '',
       firstName: '',
       lastName: '',
       phone: '',
     },
   })
+
+  console.log(form.formState.errors)
 
   return (
     <Card className='w-full'>
@@ -157,7 +147,7 @@ export const UserForm: FC<{ onSubmit: SubmitHandler<IFormValues>; initialValues?
                             type='date'
                             max={DateFormatter.yyyymmdd(new Date())}
                             value={DateFormatter.yyyymmdd(value)}
-                            onChange={(e) => onChange(new Date(e.target.value))}
+                            onChange={(e) => onChange(e.target.valueAsDate)}
                             {...field}
                           />
                         </FormControl>
@@ -166,29 +156,29 @@ export const UserForm: FC<{ onSubmit: SubmitHandler<IFormValues>; initialValues?
                     )}
                   />
                 </div>
-                <div className='grid grid-cols-2 gap-2 mt-5'>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant='destructive'
-                        className='w-full'>
-                        <Delete className='mr-2 h-4 w-4' />
-                        Удалить
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Вы уверены?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Это действие невозможно отменить. Это приведет к безвозвратному удалению учетной записи.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Отмена</AlertDialogCancel>
-                        <AlertDialogAction>Продолжить</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                <div className='grid grid-cols-1 gap-2 mt-5'>
+                  {/*<AlertDialog>*/}
+                  {/*  <AlertDialogTrigger asChild>*/}
+                  {/*    <Button*/}
+                  {/*      variant='destructive'*/}
+                  {/*      className='w-full'>*/}
+                  {/*      <Delete className='mr-2 h-4 w-4' />*/}
+                  {/*      Удалить*/}
+                  {/*    </Button>*/}
+                  {/*  </AlertDialogTrigger>*/}
+                  {/*  <AlertDialogContent>*/}
+                  {/*    <AlertDialogHeader>*/}
+                  {/*      <AlertDialogTitle>Вы уверены?</AlertDialogTitle>*/}
+                  {/*      <AlertDialogDescription>*/}
+                  {/*        Это действие невозможно отменить. Это приведет к безвозвратному удалению учетной записи.*/}
+                  {/*      </AlertDialogDescription>*/}
+                  {/*    </AlertDialogHeader>*/}
+                  {/*    <AlertDialogFooter>*/}
+                  {/*      <AlertDialogCancel>Отмена</AlertDialogCancel>*/}
+                  {/*      <AlertDialogAction>Продолжить</AlertDialogAction>*/}
+                  {/*    </AlertDialogFooter>*/}
+                  {/*  </AlertDialogContent>*/}
+                  {/*</AlertDialog>*/}
                   <Button
                     type='submit'
                     className='w-full'>
