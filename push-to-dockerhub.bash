@@ -33,7 +33,7 @@ case "$choice" in
   y|Y )
     echo "Отправка запроса на обновление..."
     sleep 3
-    curl -X POST "https://portainer.gortem.ru/api/stacks/webhooks/b64919f4-4c5b-4069-ab4b-a62c74ca7b68" || handle_error
+    curl -X POST "https://portainer.gortem.ru/api/stacks/webhooks/49f29e43-de64-48fc-99bd-398e8d3cd3e8" || handle_error
     echo "Запрос на обновление отправлен успешно"
     ;;
   * )
