@@ -44,7 +44,6 @@ export const UserForm: FC<{ onSubmit: SubmitHandler<IFormValues>; initialValues?
     resolver: zodResolver(formSchema),
     defaultValues: props.initialValues || {
       email: '',
-      // password: '',
       firstName: '',
       lastName: '',
       phone: '',

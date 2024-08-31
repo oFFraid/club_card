@@ -1,61 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { FC } from 'react'
 
 import { cardTemplatesMapping } from '@/components/card-templates/consts.ts'
-import { CardTemplateNames } from '@/components/card-templates/types.ts'
 import Layout from '@/components/layout'
-import { Button } from '@/components/ui'
+import { CurrentCardSelector } from '@/features/card-templates/ui/current-card-selector.tsx'
 import useCardTemplateInfo from '@/hooks/use-card-template-info.ts'
-import {
-  useGetProfileCardTemplateQuery,
-  useGetProfileCardTemplatesQuery,
-  useSelectProfileCardTemplateMutation,
-} from '@/store/api/card-templates-slice.ts'
-import { useProfileQuery } from '@/store/api/profile-slice.ts'
-
-const CurrentCardSelector: FC<{
-  selectedTemplate?: CardTemplateNames
-}> = ({ selectedTemplate }) => {
-  const profileQuery = useProfileQuery()
-  const profileCardTemplates = useGetProfileCardTemplatesQuery()
-  const [selectProfileCardTemplate] = useSelectProfileCardTemplateMutation()
-
-  if (profileQuery.isLoading || !profileQuery.data) return null
-  if (profileCardTemplates.isLoading || !profileCardTemplates.data) return null
-
-  const allowedTemplates = profileCardTemplates.data.templates
-
-  return (
-    <>
-      {allowedTemplates.map((key, i) => {
-        const cardTemplate = cardTemplatesMapping[key]
-        if (!cardTemplate) return null
-
-        return (
-          <Button
-            key={i}
-            variant={selectedTemplate === key ? 'default' : 'outline'}
-            onClick={() =>
-              key !== selectedTemplate &&
-              selectProfileCardTemplate({
-                template: key,
-              })
-            }>
-            {cardTemplate.label}
-          </Button>
-        )
-      })}
-    </>
-  )
-}
+import { useGetProfileCardTemplateQuery } from '@/store/api/card-templates-slice.ts'
 
 const CardsPage = () => {
   const selectedProfileCardTemplate = useGetProfileCardTemplateQuery()
-
   const cardInfo = useCardTemplateInfo()
 
   const selectedTemplate = selectedProfileCardTemplate.data?.template
-
   const CardComponent = selectedTemplate ? cardTemplatesMapping[selectedTemplate].Component : () => null
 
   return (

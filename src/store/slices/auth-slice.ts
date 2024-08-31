@@ -19,9 +19,6 @@ const authSlice = createSlice({
       state.token = accessToken
       state.isLoggedIn = true
     },
-    setToken(state) {
-      state.token = 'invalid'
-    },
     removeToken(state) {
       state.token = null
     },
@@ -32,5 +29,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { login, logout, removeToken, setToken } = authSlice.actions
+export const { login, logout, removeToken } = authSlice.actions
 export default authSlice.reducer
