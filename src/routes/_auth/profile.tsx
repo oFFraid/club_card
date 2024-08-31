@@ -61,16 +61,15 @@ const MePage = () => {
                 phone: profileQuery.data?.phone ? profileQuery.data.phone.replace(/[^0-9.]/g, '') : '',
                 birthDate: profileQuery.data?.birthDay ? new Date(profileQuery.data?.birthDay) : undefined,
               }}
-              onSubmit={({ email, phone, firstName, lastName, birthDate }) => {
-                console.log('work')
-                return updateProfile({
+              onSubmit={({ email, phone, firstName, lastName, birthDate }) =>
+                updateProfile({
                   email,
                   phone: phone || null,
                   firstName,
                   lastName,
                   birthDate: DateFormatter.yyyymmdd(birthDate) || null,
                 })
-              }}
+              }
             />
           </div>
         </div>

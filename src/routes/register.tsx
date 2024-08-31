@@ -11,7 +11,7 @@ import { z } from '@/validation/ru-zod.ts'
 const RegisterPage = () => {
   const [registerMutation, registerMutationData] = useRegisterMutation()
   const navigate = Route.useNavigate()
-  console.log(registerMutationData)
+
   useToastOnError({
     isError: registerMutationData.isError,
     error: getServerErrorStatus(registerMutationData.error) === 409 ? 'Почта уже существует' : undefined,

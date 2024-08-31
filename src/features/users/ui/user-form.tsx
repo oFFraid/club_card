@@ -50,8 +50,6 @@ export const UserForm: FC<{ onSubmit: SubmitHandler<IFormValues>; initialValues?
     },
   })
 
-  console.log(form.formState.errors)
-
   return (
     <Card className='w-full'>
       <CardHeader>
