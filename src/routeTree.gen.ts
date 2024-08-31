@@ -16,11 +16,11 @@ import { Route as LoginImport } from './routes/login'
 import { Route as ForbiddenImport } from './routes/forbidden'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthProfileImport } from './routes/_auth/profile'
 import { Route as AuthMainImport } from './routes/_auth/main'
+import { Route as AuthCardTemplatesImport } from './routes/_auth/card-templates'
 import { Route as AuthUsersIndexImport } from './routes/_auth/users/index'
-import { Route as AuthProfileIndexImport } from './routes/_auth/profile/index'
 import { Route as AuthCardsIndexImport } from './routes/_auth/cards/index'
-import { Route as AuthCardsTemplatesImport } from './routes/_auth/cards/templates'
 import { Route as AuthCardsAddImport } from './routes/_auth/cards/add'
 import { Route as AuthUsersUserIdEditImport } from './routes/_auth/users/$userId.edit'
 
@@ -51,8 +51,18 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthProfileRoute = AuthProfileImport.update({
+  path: '/profile',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AuthMainRoute = AuthMainImport.update({
   path: '/main',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthCardTemplatesRoute = AuthCardTemplatesImport.update({
+  path: '/card-templates',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -61,18 +71,8 @@ const AuthUsersIndexRoute = AuthUsersIndexImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthProfileIndexRoute = AuthProfileIndexImport.update({
-  path: '/profile/',
-  getParentRoute: () => AuthRoute,
-} as any)
-
 const AuthCardsIndexRoute = AuthCardsIndexImport.update({
   path: '/cards/',
-  getParentRoute: () => AuthRoute,
-} as any)
-
-const AuthCardsTemplatesRoute = AuthCardsTemplatesImport.update({
-  path: '/cards/templates',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -125,11 +125,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/card-templates': {
+      id: '/_auth/card-templates'
+      path: '/card-templates'
+      fullPath: '/card-templates'
+      preLoaderRoute: typeof AuthCardTemplatesImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/main': {
       id: '/_auth/main'
       path: '/main'
       fullPath: '/main'
       preLoaderRoute: typeof AuthMainImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/profile': {
+      id: '/_auth/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthProfileImport
       parentRoute: typeof AuthImport
     }
     '/_auth/cards/add': {
@@ -139,25 +153,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCardsAddImport
       parentRoute: typeof AuthImport
     }
-    '/_auth/cards/templates': {
-      id: '/_auth/cards/templates'
-      path: '/cards/templates'
-      fullPath: '/cards/templates'
-      preLoaderRoute: typeof AuthCardsTemplatesImport
-      parentRoute: typeof AuthImport
-    }
     '/_auth/cards/': {
       id: '/_auth/cards/'
       path: '/cards'
       fullPath: '/cards'
       preLoaderRoute: typeof AuthCardsIndexImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/profile/': {
-      id: '/_auth/profile/'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthProfileIndexImport
       parentRoute: typeof AuthImport
     }
     '/_auth/users/': {
@@ -182,11 +182,11 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthRoute: AuthRoute.addChildren({
+    AuthCardTemplatesRoute,
     AuthMainRoute,
+    AuthProfileRoute,
     AuthCardsAddRoute,
-    AuthCardsTemplatesRoute,
     AuthCardsIndexRoute,
-    AuthProfileIndexRoute,
     AuthUsersIndexRoute,
     AuthUsersUserIdEditRoute,
   }),
@@ -216,11 +216,11 @@ export const routeTree = rootRoute.addChildren({
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/card-templates",
         "/_auth/main",
+        "/_auth/profile",
         "/_auth/cards/add",
-        "/_auth/cards/templates",
         "/_auth/cards/",
-        "/_auth/profile/",
         "/_auth/users/",
         "/_auth/users/$userId/edit"
       ]
@@ -234,24 +234,24 @@ export const routeTree = rootRoute.addChildren({
     "/register": {
       "filePath": "register.tsx"
     },
+    "/_auth/card-templates": {
+      "filePath": "_auth/card-templates.tsx",
+      "parent": "/_auth"
+    },
     "/_auth/main": {
       "filePath": "_auth/main.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/profile": {
+      "filePath": "_auth/profile.tsx",
       "parent": "/_auth"
     },
     "/_auth/cards/add": {
       "filePath": "_auth/cards/add.tsx",
       "parent": "/_auth"
     },
-    "/_auth/cards/templates": {
-      "filePath": "_auth/cards/templates.tsx",
-      "parent": "/_auth"
-    },
     "/_auth/cards/": {
       "filePath": "_auth/cards/index.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/profile/": {
-      "filePath": "_auth/profile/index.tsx",
       "parent": "/_auth"
     },
     "/_auth/users/": {

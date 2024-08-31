@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.tsx'
 import { useLogoutMutation } from '@/store/api/auth-slice.ts'
-import { useProfileQuery } from '@/store/api/members-slice.ts'
+import { useProfileQuery } from '@/store/api/profile-slice.ts'
 import { RoleResponse } from '@/types/members.ts'
 import { cn } from '@/utils'
 
@@ -24,7 +24,7 @@ const menuLinks: {
   roles: RoleResponse[]
 }[] = [
   { link: '/cards', label: 'Карты', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN', 'ROLE_USER'] },
-  { link: '/cards/templates', label: 'Шаблоны карт', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN'] },
+  { link: '/card-templates', label: 'Шаблоны карт', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN'] },
   { link: '/users', label: 'Пользователи', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN'] },
 ]
 

@@ -2,6 +2,7 @@ import { createRootRouteWithContext, Outlet, useRouter } from '@tanstack/react-r
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { useEffect } from 'react'
 
+import ErrorBoundary from '@/components/error-boundary.tsx'
 import NotFound from '@/components/not-found.tsx'
 import { Toaster } from '@/components/ui/toaster.tsx'
 import { useAppSelector } from '@/hooks/use-app-selector.ts'
@@ -50,4 +51,5 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   notFoundComponent: () => {
     return <NotFound />
   },
+  errorComponent: ErrorBoundary,
 })

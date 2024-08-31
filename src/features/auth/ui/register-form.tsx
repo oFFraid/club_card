@@ -21,6 +21,7 @@ import {
   MaskInput,
   PasswordInput,
 } from '@/components/ui'
+import { Checkbox } from '@/components/ui/checkbox.tsx'
 import { DateFormatter } from '@/utils/formatters.ts'
 import {
   birthDateValidator,
@@ -40,6 +41,7 @@ const formSchema = passwordValidationSchema.and(
     lastName: lastNameValidator,
     birthDate: birthDateValidator.optional(),
     phone: looseOptional(phoneValidator),
+    agree: z.boolean(),
   }),
 )
 
@@ -197,7 +199,31 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
                     )}
                   />
                 </div>
-
+                <FormField
+                  control={form.control}
+                  name='agree'
+                  render={({ field }) => (
+                    <FormItem className='flex items-center justify-end gap-2 flex-row-reverse space-y-0'>
+                      <FormLabel className='text-xs'>
+                        Я прочитал(а) и соглашаюсь с{' '}
+                        <a
+                          className='underline'
+                          href='https://www.consultant.ru/document/cons_doc_LAW_61801'
+                          target='_blank'
+                          rel='noopener noreferrer'>
+                          пользовательским соглашением
+                        </a>
+                      </FormLabel>
+                      <FormControl className='m-0'>
+                        <Checkbox
+                          checked={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button
                   type='submit'
                   className='w-full mt-5'>

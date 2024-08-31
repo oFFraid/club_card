@@ -1,5 +1,8 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
+import ErrorBoundary from '@/components/error-boundary.tsx'
+import Layout from '@/components/layout'
+
 const AuthLayout = () => {
   return <Outlet />
 }
@@ -17,4 +20,9 @@ export const Route = createFileRoute('/_auth')({
     }
   },
   component: AuthLayout,
+  errorComponent: () => (
+    <Layout>
+      <ErrorBoundary />
+    </Layout>
+  ),
 })

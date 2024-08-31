@@ -1,25 +1,12 @@
 import { login } from '@/store/slices/auth-slice.ts'
 import { ILoginResponse } from '@/types/auth.ts'
 import { ArrayResponse } from '@/types/common.ts'
-import {
-  IMemberResponse,
-  IMemberUpdatePayload,
-  IProfileResponse,
-  PrivilegeResponse,
-  RoleResponse,
-} from '@/types/members.ts'
+import { IMemberResponse, PrivilegeResponse, RoleResponse } from '@/types/members.ts'
 
 import { apiSlice } from './api-slice'
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    profile: builder.query<IProfileResponse, void>({
-      query: () => ({
-        url: '/profile',
-        method: 'GET',
-      }),
-      providesTags: ['Profile'],
-    }),
     members: builder.query<
       ArrayResponse<IMemberResponse>,
       {
@@ -28,7 +15,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       }
     >({
       query: ({ page, size }) => ({
-        url: '/members',
+        url: 'members',
         method: 'GET',
         params: { page, size },
       }),
@@ -52,15 +39,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
           console.error(error)
         }
       },
-    }),
-
-    updateProfile: builder.mutation<unknown, IMemberUpdatePayload>({
-      query: ({ firstName, lastName, birthDate, email, password, phone }) => ({
-        url: `/profile/update-fields`,
-        method: 'PUT',
-        body: { firstName, lastName, birthday: birthDate, email, password, phone },
-      }),
-      invalidatesTags: ['Profile'],
     }),
     changeMemberLocked: builder.mutation<unknown, { id: number; locked: boolean }>({
       query: ({ id, locked }) => ({
@@ -93,7 +71,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       }
     >({
       query: ({ id }) => ({
-        url: `/members/${id}`,
+        url: `members/${id}`,
         method: 'GET',
       }),
       providesTags: ['User'],
@@ -103,11 +81,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-  useProfileQuery,
   useChangeMemberRoleMutation,
   useChangeMemberPrivilegeMutation,
   useChangeMemberLockedMutation,
   useMemberQuery,
   useMembersQuery,
-  useUpdateProfileMutation,
 } = extendedApiSlice

@@ -2,7 +2,8 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import Layout from '@/components/layout'
 import { UsersTable } from '@/features/users'
-import { useMembersQuery, useProfileQuery } from '@/store/api/members-slice.ts'
+import { useMembersQuery } from '@/store/api/members-slice.ts'
+import { useProfileQuery } from '@/store/api/profile-slice'
 import { paginationSchema } from '@/validation/pagination-schema.ts'
 
 const perPage = 5

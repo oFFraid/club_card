@@ -1,21 +1,16 @@
 import { AlertOctagon } from 'lucide-react'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 
-import { Button, useToast } from '@/components/ui'
+import { Button } from '@/components/ui'
+import { useToastOnError } from '@/hooks/use-toast-on.tsx'
 import { useChangeMemberLockedMutation } from '@/store/api/members-slice.ts'
 
 const BlockButton: FC<{ userId: number; locked: boolean }> = ({ userId, locked }) => {
   const [changeLockUserMutation, changeLockUserMutationInfo] = useChangeMemberLockedMutation()
-  const { toast } = useToast()
 
-  useEffect(() => {
-    if (changeLockUserMutationInfo.isError) {
-      toast({
-        title: 'Неизвестная ошибка !',
-        variant: 'destructive',
-      })
-    }
-  }, [changeLockUserMutationInfo.isError, toast])
+  useToastOnError({
+    isError: changeLockUserMutationInfo.isError,
+  })
 
   return (
     <Button

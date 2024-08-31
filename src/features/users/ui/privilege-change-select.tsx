@@ -1,8 +1,8 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 
-import { useToast } from '@/components/ui'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
 import { USER_PRIVILEGES_NAMES } from '@/consts'
+import { useToastOnError } from '@/hooks/use-toast-on.tsx'
 import { useChangeMemberPrivilegeMutation } from '@/store/api/members-slice.ts'
 import { PrivilegeResponse } from '@/types/members.ts'
 
@@ -11,17 +11,11 @@ const PrivilegeChangeSelect: FC<{
   currentPrivilege: PrivilegeResponse
 }> = ({ userId, currentPrivilege }) => {
   const [changePrivilegeMutation, changePrivilegeMutationInfo] = useChangeMemberPrivilegeMutation()
-  const { toast } = useToast()
   const allPrivileges = Object.keys(USER_PRIVILEGES_NAMES) as PrivilegeResponse[]
 
-  useEffect(() => {
-    if (changePrivilegeMutationInfo.isError) {
-      toast({
-        title: 'Неизвестная ошибка !',
-        variant: 'destructive',
-      })
-    }
-  }, [changePrivilegeMutationInfo.isError, toast])
+  useToastOnError({
+    isError: changePrivilegeMutationInfo.isError,
+  })
 
   return (
     <Select

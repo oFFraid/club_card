@@ -5,7 +5,7 @@ import { FC, useEffect } from 'react'
 
 import Spinner from '@/components/ui/spinner.tsx'
 import { useAppSelector } from '@/hooks/use-app-selector.ts'
-import { useProfileQuery } from '@/store/api/members-slice.ts'
+import { useProfileQuery } from '@/store/api/profile-slice.ts'
 
 export const Router: FC<RouterProps> = (props) => {
   const authed = useAppSelector((state) => state.auth.isLoggedIn)

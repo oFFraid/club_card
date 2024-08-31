@@ -1,10 +1,14 @@
-export type ICardTemplateResponse = string
+import { CardTemplateNames } from '@/components/card-templates/types.ts'
+import { PrivilegeResponse } from '@/types/members.ts'
 
-export interface IMemberUpdatePayload {
-  password?: string
-  firstName: string
-  lastName: string
-  email: string
-  phone?: string | null
-  birthDate?: string | null
+export type ITemplatePrivilegesMap = {
+  templatePrivilegesMap: Record<CardTemplateNames, PrivilegeResponse[]>
+}
+
+export type ICardTemplate = {
+  template: CardTemplateNames
+}
+
+export type ICardTemplates = {
+  templates: CardTemplateNames[]
 }

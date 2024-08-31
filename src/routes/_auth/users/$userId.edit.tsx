@@ -13,7 +13,8 @@ import {
   UsersPrivilegeChangesSelect,
   UsersRolesChangesSelect,
 } from '@/features/users'
-import { useMemberQuery, useProfileQuery } from '@/store/api/members-slice.ts'
+import { useMemberQuery } from '@/store/api/members-slice.ts'
+import { useProfileQuery } from '@/store/api/profile-slice.ts'
 import { cn } from '@/utils'
 
 const UserEditPage = () => {

@@ -1,8 +1,8 @@
-import { FC, useEffect, useMemo } from 'react'
+import { FC, useMemo } from 'react'
 
-import { useToast } from '@/components/ui'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
 import { USER_ROLES_NAMES } from '@/consts'
+import { useToastOnError } from '@/hooks/use-toast-on.tsx'
 import { useChangeMemberRoleMutation } from '@/store/api/members-slice.ts'
 import { RoleResponse } from '@/types/members.ts'
 
@@ -12,7 +12,10 @@ const RoleChangeSelect: FC<{
   roleOfCurrentUser?: RoleResponse
 }> = ({ userId, currentRole, roleOfCurrentUser }) => {
   const [changeRoleMutation, changeRoleMutationInfo] = useChangeMemberRoleMutation()
-  const { toast } = useToast()
+
+  useToastOnError({
+    isError: changeRoleMutationInfo.isError,
+  })
 
   const allRoles: RoleResponse[] = useMemo(() => {
     if (roleOfCurrentUser === 'ROLE_SUPERUSER') {
@@ -25,15 +28,6 @@ const RoleChangeSelect: FC<{
 
     return ['ROLE_USER', 'ROLE_ADMIN']
   }, [currentRole, roleOfCurrentUser])
-
-  useEffect(() => {
-    if (changeRoleMutationInfo.isError) {
-      toast({
-        title: 'Неизвестная ошибка !',
-        variant: 'destructive',
-      })
-    }
-  }, [changeRoleMutationInfo.isError, toast])
 
   return (
     <Select
