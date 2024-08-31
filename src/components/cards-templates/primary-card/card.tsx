@@ -6,14 +6,12 @@ import { privilegesMapping, rolesMapping } from '@/consts'
 import { cn } from '@/utils'
 
 import commonStyles from '../common.module.css'
-import { CardInfo } from '../types.ts'
+import { CardTemplateProps } from '../types.ts'
 import styles from './style.module.css'
 
-const Card: FC<{
-  info: CardInfo
-}> = ({ info }) => {
+const Card: FC<CardTemplateProps> = ({ info, onlyFrontSide = false }) => {
   return (
-    <div className={cn(commonStyles.flipCard, 'w-full h-full cursor-pointer')}>
+    <div className={cn(!onlyFrontSide && commonStyles.flipCard, 'w-full h-full cursor-pointer')}>
       <div className={cn(commonStyles.flipCardInner)}>
         <div className={cn(styles.frontSide, commonStyles.flipCardFront)}>
           <div className={styles.colorGrid}>
@@ -58,29 +56,31 @@ const Card: FC<{
             </div>
           </div>
         </div>
-        <div className={cn(styles.backSide, commonStyles.flipCardBack)}>
-          <div className={styles.colorGrid}>
-            <div className={styles.black} />
-            <div className={cn(styles.red1, 'bg-primary')} />
-            <div className={cn(styles.red2, 'bg-primary')} />
-            <div className={cn(styles.green, 'bg-secondary')} />
+        {!onlyFrontSide && (
+          <div className={cn(styles.backSide, !onlyFrontSide && commonStyles.flipCardBack)}>
+            <div className={styles.colorGrid}>
+              <div className={styles.black} />
+              <div className={cn(styles.red1, 'bg-primary')} />
+              <div className={cn(styles.red2, 'bg-primary')} />
+              <div className={cn(styles.green, 'bg-secondary')} />
+            </div>
+            <div
+              className={cn(
+                'aspect-square w-1/2 p-2 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
+                styles.blur,
+              )}>
+              <QRCodeSVG
+                className='h-full w-full object-cover'
+                value={JSON.stringify({
+                  email: info.email,
+                  locked: info.locked,
+                  role: info.role,
+                  privilege: info.privilege,
+                })}
+              />
+            </div>
           </div>
-          <div
-            className={cn(
-              'aspect-square w-1/2 p-2 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2',
-              styles.blur,
-            )}>
-            <QRCodeSVG
-              className='h-full w-full object-cover'
-              value={JSON.stringify({
-                email: info.email,
-                locked: info.locked,
-                role: info.role,
-                privilege: info.privilege,
-              })}
-            />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Navigate, redirect, useRouter } from '@tanstack/react-router'
 import { ChevronLeft } from 'lucide-react'
 
 import Layout from '@/components/layout'
@@ -88,4 +88,11 @@ const UserEditPage = () => {
 
 export const Route = createFileRoute('/_auth/users/$userId/edit')({
   component: UserEditPage,
+  beforeLoad: (ctx) => {
+    if (!ctx.context.auth.canAccess(['ROLE_SUPERUSER', 'ROLE_ADMIN'])) {
+      throw redirect({
+        to: '/forbidden',
+      })
+    }
+  },
 })

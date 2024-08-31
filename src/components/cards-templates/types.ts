@@ -1,6 +1,8 @@
+import { FC } from 'react'
+
 import { PrivilegeResponse, RoleResponse } from '@/types/members.ts'
 
-export type CardInfo = {
+export type CardTemplateInfo = {
   firstName: string
   lastName: string
   email: string
@@ -11,3 +13,17 @@ export type CardInfo = {
   locked: boolean
   role: RoleResponse
 }
+
+export type CardTemplateProps = {
+  info: CardTemplateInfo
+  onlyFrontSide?: boolean
+}
+
+export type CardTemplateNames = '1' | '2'
+
+export type CardTemplate = {
+  Component: FC<CardTemplateProps>
+  label: string
+}
+
+export type CardTemplateMap = { [key in CardTemplateNames]: CardTemplate }

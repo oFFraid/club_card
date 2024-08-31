@@ -1,7 +1,7 @@
 import '@/styles/index.css'
 
 import { RouterProps, RouterProvider } from '@tanstack/react-router'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 import Spinner from '@/components/ui/spinner.tsx'
 import { useAppSelector } from '@/hooks/use-app-selector.ts'
@@ -11,7 +11,11 @@ export const Router: FC<RouterProps> = (props) => {
   const authed = useAppSelector((state) => state.auth.isLoggedIn)
   const profileQuery = useProfileQuery()
 
-  if (profileQuery.isLoading) return <Spinner />
+  useEffect(() => {
+    if (authed) profileQuery.refetch()
+  }, [authed, profileQuery.refetch])
+
+  if (authed && !profileQuery.data) return <Spinner />
 
   return (
     <RouterProvider

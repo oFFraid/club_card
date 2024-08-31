@@ -24,8 +24,8 @@ const menuLinks: {
   roles: RoleResponse[]
 }[] = [
   { link: '/cards', label: 'Карты', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN', 'ROLE_USER'] },
+  { link: '/cards/templates', label: 'Шаблоны карт', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN'] },
   { link: '/users', label: 'Пользователи', roles: ['ROLE_SUPERUSER', 'ROLE_ADMIN'] },
-  // { link: '/cards/add', label: 'Редактор карт' },
 ]
 
 const LogoLink: FC<
@@ -36,6 +36,9 @@ const LogoLink: FC<
   return (
     <Link
       to='/'
+      activeOptions={{
+        exact: false,
+      }}
       className={cn('w-[55px] h-[60px]', className)}
       {...props}>
       <img

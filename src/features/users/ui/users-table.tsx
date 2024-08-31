@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { EditIcon } from 'lucide-react'
-import { FC } from 'react'
+import { BoxIcon, EditIcon } from 'lucide-react'
+import { FC, HTMLAttributes } from 'react'
 
 import {
   Button,
@@ -31,6 +31,7 @@ import Spinner from '@/components/ui/spinner.tsx'
 import { privilegesMapping, rolesMapping } from '@/consts'
 import { PaginationParams, usePagination } from '@/hooks/use-pagination.ts'
 import { PrivilegeResponse, RoleResponse } from '@/types/members.ts'
+import { cn } from '@/utils'
 
 const TablePagination: FC<
   {
@@ -100,6 +101,19 @@ export type UserTableItem = {
   role: RoleResponse
 }
 
+const EmptyBlock: FC<HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => {
+  return (
+    <div
+      className={cn('text-center', className)}
+      {...props}>
+      <div className='flex items-center justify-center mb-3'>
+        <BoxIcon className='w-12 h-12' />
+      </div>
+      <span className='text-lg text-gray-500'>Список пуст</span>
+    </div>
+  )
+}
+
 const UsersTable: FC<{
   pagination: PaginationParams
   loading?: boolean
@@ -166,12 +180,16 @@ const UsersTable: FC<{
                 ))}
               </TableBody>
             </Table>
-            <div className='mt-4 flex flex-row items-center'>
-              <TablePagination
-                size='icon'
-                pagination={pagination}
-              />
-            </div>
+            {items?.length ? (
+              <div className='mt-4 flex flex-row items-center'>
+                <TablePagination
+                  size='icon'
+                  pagination={pagination}
+                />
+              </div>
+            ) : (
+              <EmptyBlock className='px-20' />
+            )}
           </>
         )}
       </CardContent>
