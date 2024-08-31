@@ -3,7 +3,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import AuthLayout from '@/components/layout/auth-layout.tsx'
 import { NAVIGATION_FALLBACK } from '@/consts'
 import { LoginForm } from '@/features/auth'
-import { useToastOnError } from '@/hooks/use-toast-on.tsx'
+import { useToastOnError } from '@/hooks/use-toast-on.ts'
 import { useLoginMutation } from '@/store/api/auth-slice.ts'
 import { z } from '@/validation/ru-zod.ts'
 

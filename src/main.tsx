@@ -11,16 +11,12 @@ const rootElement = document.getElementById('root')!
 
 const root = ReactDOM.createRoot(rootElement)
 
-const Providers = () => {
-  return (
-    <Provider store={store}>
-      <PersistGate
-        loading={null}
-        persistor={persistor}>
-        <Router router={router} />
-      </PersistGate>
-    </Provider>
-  )
-}
-
-root.render(<Providers />)
+root.render(
+  <Provider store={store}>
+    <PersistGate
+      loading={null}
+      persistor={persistor}>
+      <Router router={router} />
+    </PersistGate>
+  </Provider>,
+)

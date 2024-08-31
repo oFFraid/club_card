@@ -32,7 +32,6 @@ export const passwordValidationSchema = z
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
-      addFieldIssue('password', ctx)
       addFieldIssue('confirmPassword', ctx)
     }
   })

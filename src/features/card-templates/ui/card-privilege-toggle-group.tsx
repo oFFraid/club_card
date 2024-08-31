@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { CardTemplateNames } from '@/components/card-templates/types.ts'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.tsx'
 import { USER_PRIVILEGES_NAMES } from '@/consts'
-import { useToastOnError, useToastOnSuccess } from '@/hooks/use-toast-on.tsx'
+import { useToastOnError, useToastOnSuccess } from '@/hooks/use-toast-on.ts'
 import { useSelectPrivilegeForCardTemplateMutation } from '@/store/api/card-templates-slice.ts'
 import { PrivilegeResponse } from '@/types/members.ts'
 

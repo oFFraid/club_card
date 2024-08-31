@@ -3,16 +3,18 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import AuthLayout from '@/components/layout/auth-layout.tsx'
 import { NAVIGATION_FALLBACK } from '@/consts'
 import { RegisterForm } from '@/features/auth'
-import { useToastOnError } from '@/hooks/use-toast-on.tsx'
+import { useToastOnError } from '@/hooks/use-toast-on.ts'
 import { useRegisterMutation } from '@/store/api/auth-slice.ts'
+import { getServerErrorStatus } from '@/utils'
 import { z } from '@/validation/ru-zod.ts'
 
 const RegisterPage = () => {
   const [registerMutation, registerMutationData] = useRegisterMutation()
   const navigate = Route.useNavigate()
-
+  console.log(registerMutationData)
   useToastOnError({
     isError: registerMutationData.isError,
+    error: getServerErrorStatus(registerMutationData.error) === 409 ? 'Почта уже существует' : undefined,
   })
 
   return (

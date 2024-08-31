@@ -41,7 +41,9 @@ const formSchema = passwordValidationSchema.and(
     lastName: lastNameValidator,
     birthDate: birthDateValidator.optional(),
     phone: looseOptional(phoneValidator),
-    agree: z.boolean(),
+    agree: z.literal(true, {
+      message: 'Обязательно',
+    }),
   }),
 )
 
@@ -58,6 +60,7 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
       confirmPassword: '',
       phone: '',
     },
+    reValidateMode: 'onChange',
   })
 
   return (
@@ -202,7 +205,7 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
                 <FormField
                   control={form.control}
                   name='agree'
-                  render={({ field }) => (
+                  render={({ field: { value, onChange, ...field } }) => (
                     <FormItem className='flex items-center justify-end gap-2 flex-row-reverse space-y-0'>
                       <FormLabel className='text-xs'>
                         Я прочитал(а) и соглашаюсь с{' '}
@@ -216,11 +219,11 @@ export const RegisterForm: FC<{ onSubmit: SubmitHandler<IFormValues> }> = (props
                       </FormLabel>
                       <FormControl className='m-0'>
                         <Checkbox
-                          checked={field.value}
-                          onChange={field.onChange}
+                          checked={value}
+                          onCheckedChange={onChange}
+                          {...field}
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />

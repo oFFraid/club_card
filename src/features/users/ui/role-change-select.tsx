@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.tsx'
 import { USER_ROLES_NAMES } from '@/consts'
-import { useToastOnError } from '@/hooks/use-toast-on.tsx'
+import { useToastOnError } from '@/hooks/use-toast-on.ts'
 import { useChangeMemberRoleMutation } from '@/store/api/members-slice.ts'
 import { RoleResponse } from '@/types/members.ts'
 

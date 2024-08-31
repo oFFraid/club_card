@@ -20,13 +20,13 @@ const MaskInput = forwardRef<
 >(({ value, onChange, mask, ...props }, ref) => {
   const { maskRef, ref: inputRef } = useIMask<HTMLInputElement>(mask, {
     onAccept: (_, mask) => {
-      onChange &&
-        onChange({
-          target: {
-            name: props.name,
-            value: mask.unmaskedValue,
-          },
-        })
+      if (!onChange) return
+      onChange({
+        target: {
+          name: props.name,
+          value: mask.unmaskedValue,
+        },
+      })
     },
   })
 
